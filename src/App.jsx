@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Todo from "./components/Todo";
+import Footer from "./components/Footer";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,7 +21,7 @@ function App() {
   return (
     <>
       <div className="flex justify-center">
-        <div className="max-w-[600px] min-w-96 w-full flex flex-col gap-8">
+        <div className="max-w-[600px] min-w-96 w-full h-full flex flex-col gap-8 justify-between">
           <Navbar />
           <div className="px-24 flex flex-col gap-8">
             <div className="w-full aspect-video  ">
@@ -60,6 +61,7 @@ function App() {
           </div>
         </div>
       </div>
+          <Footer />
     </>
   );
 }
