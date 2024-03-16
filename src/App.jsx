@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -8,43 +8,68 @@ function App() {
   const [todo, setTodo] = useState("");
   const [tdata, setTdata] = useState([]);
 
-  const data = [
-    {
-      title: "jsx dffdd fddfdf",
-      description: "Decs 1",
-    },
-    {
-      title: "Hi 2 fdfdf fdgh",
-      description: "Descddfd ff 2",
-    },
-  ];
+  useEffect(() => {
+    let todoString = localStorage.getItem("tdata");
+    if (todoString) {
+      let tdata = JSON.parse(todoString);
+      setTdata(tdata);
+    }
+  }, []);
 
-  const handleAdd = async () => {
-    setTdata([...tdata, { id: uuidv4(), todo, iscompleted: false }])
+  
+
+  const savetoLS = () => {
+    localStorage.setItem("tdata", JSON.stringify(tdata));
+  };
+
+  const taskcount = () => {
+    let sn = "";
+    let totaltask = tdata.length;
+    let taskdone = tdata.filter((item) => {
+      return item.iscompleted === true;
+    });
+    sn = `${taskdone.length}/${totaltask}`;
+
+    return sn;
+  };
+
+  const handleAdd = () => {
+    setTdata([...tdata, { id: uuidv4(), todo, iscompleted: false }]);
     setTodo("");
-    console.log(tdata);
+    savetoLS();
+  };
+
+  const handleDelete=  (e, id)=>{ 
+    let newTdata = tdata.filter(item => item.id !== id);
+         setTdata(newTdata);
+         savetoLS();
+  }
+
+
+
+
+  const handleEdit = (e, id) => {
+    let t = tdata.filter((i) => i.id === id);
+    setTodo(t[0].todo);
+    let newTdata = tdata.filter((item) => {
+      return item.id != id;
+    });
+    setTdata(newTdata);
+    savetoLS();
   };
 
   const handleChange = (e) => {
     setTodo(e.target.value);
   };
-
-  const handledelete = (e , id) => {
-    let newTdata = tdata.filter(item=>{
-      return item.id!=id;
-    });
-    setTdata(newTdata);
-  };
-
-
   const hangeCheckbox = (e) => {
     let id = e.target.name;
-    let index = tdata.findIndex(item=>{
+    let index = tdata.findIndex((item) => {
       return item.id === id;
     });
     let newTdata = [...tdata];
     newTdata[index].iscompleted = !newTdata[index].iscompleted;
     setTdata(newTdata);
+    savetoLS();
   };
 
   return (
@@ -60,7 +85,7 @@ function App() {
                   <p>Keep it up</p>
                 </div>
                 <div className="bg-[var(--primary)] h-full aspect-square rounded-full flex justify-center items-center">
-                  <h1 className="font-bold text-3xl"></h1>
+                  <h1 className="font-bold text-3xl">{taskcount()}</h1>
                 </div>
               </div>
             </div>
@@ -75,8 +100,9 @@ function App() {
                 value={todo}
               />
               <button
+                disabled={todo.length<3}
                 onClick={handleAdd}
-                className="flex items-center justify-center bg-[var(--primary)]  h-full aspect-square rounded-full font-bold p-2"
+                className="flex items-center justify-center bg-[var(--primary)]  h-full aspect-square rounded-full font-bold p-2 disabled:bg-gray-400"
               >
                 <span className="material-symbols-outlined">add</span>
               </button>
@@ -84,7 +110,10 @@ function App() {
             <div className="flex flex-col gap-4">
               {tdata.map((val) => {
                 return (
-                  <div key={val.id} className="flex justify-between items-center border border-[var(--secondary)] py-2 px-4 rounded-xl">
+                  <div
+                    key={val.id}
+                    className="flex justify-between items-center border border-[var(--secondary)] py-2 px-4 rounded-xl"
+                  >
                     <div className="flex justify-center items-center gap-4">
                       <div className="inline-flex items-center">
                         <label
@@ -95,6 +124,7 @@ function App() {
                             onChange={hangeCheckbox}
                             name={val.id}
                             type="checkbox"
+                            checked={val.iscompleted}
                             className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-full border border-blue-gray-200 text-green-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-green-500 checked:before:bg-green-500 hover:before:opacity-10"
                             id="green"
                           />
@@ -125,14 +155,17 @@ function App() {
                       </h2>
                     </div>
                     <div className="flex justify-center items-center gap-4">
-                      <button className="flex justify-center items-center">
+                      <button
+                        onClick={(e) => handleEdit(e, val.id)}
+                        className="flex justify-center items-center"
+                      >
                         <span className="material-symbols-outlined text-[var(--secondary)]">
                           edit_square
                         </span>
                       </button>
                       <button
                         className="flex justify-center items-center"
-                        onClick={(e)=>{handledelete(e , val.id)}}
+                        onClick={(e) => handleDelete(e, val.id)}
                       >
                         <span className="material-symbols-outlined text-[var(--secondary)]">
                           delete
@@ -146,7 +179,6 @@ function App() {
           </div>
         </div>
       </div>
-      
     </>
   );
 }
