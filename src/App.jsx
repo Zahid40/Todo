@@ -16,6 +16,12 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    
+    return console.log(tdata);
+  }, [tdata]);
+  
+
   
 
   const savetoLS = () => {
@@ -177,6 +183,7 @@ function App() {
               })}
             </div>
           </div>
+          <Footer/>
         </div>
       </div>
     </>

@@ -18,6 +18,9 @@
   --secondary:#cebea4;
   --green:#57cb4c;
 }
+*::-webkit-scrollbar{
+  display: none;
+}
 
 @layer base {
   html {
