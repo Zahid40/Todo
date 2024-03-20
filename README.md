@@ -19,14 +19,12 @@ Check out the live demo of DotoZ [here](https://dotoz.vercel.app/).
 
 - React
 - Vite
-- [Add any additional technologies/frameworks/libraries used]
 
 ## Installation
 
 To install DotoZ as a web app:
 
 1. Open the website [here](https://dotoz.vercel.app/) in your browser.
-2. [Add installation instructions if necessary]
 
 ## Getting Started
 
@@ -39,12 +37,3 @@ To run DotoZ locally:
 ## Contributing
 
 Contributions are welcome! If you have any ideas for new features, improvements, or find any issues, feel free to open an issue or submit a pull request.
-
-## License
-
-[Add your license information here]
-
-## Contact
-
-For any inquiries or support, please contact [your email or contact information].
-
